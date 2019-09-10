@@ -11,9 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -26,9 +24,6 @@ import frc.robot.subsystems.Drivetrain;
 public class Robot extends TimedRobot {
   public static Drivetrain drivetrain = new Drivetrain();
   public static OI m_oi;
-
-  Command m_autonomousCommand;
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -77,12 +72,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
-    }
   }
 
   /**
@@ -95,13 +84,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
   }
 
   /**
