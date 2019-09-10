@@ -25,7 +25,9 @@ public class RobotMap {
 
   // Driver Stick Information
   public static Joystick driverStick; // Can list more than one joystick here
-  public static int driverStickPort = 0;
+  public static int driverStickPort = 0; // The driver station item slot this controler resides in
+  public static int driverThroAxis = 1; // The axis for thro
+  public static int driverYawAxis = 2; // The axis for yaw
 
   // Drive motor Controlers
   public static TalonSRX starboardMotor;

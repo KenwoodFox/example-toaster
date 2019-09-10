@@ -16,16 +16,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
- * This class interfaces to the drivetrain
+ * This subsystem interfaces to the drivetrain
  */
 public class Drivetrain extends Subsystem {
   /**
-   * Takes Starboard, Port, Driver Stick, Turn Damp, Thro Damp, and verbose. Drives the robot using FlyByWireA
+   * flyByWireA uses no PID control and is fully manual
+   * For manual driver stick imput only
    */
   public static void flyByWireA(TalonSRX starboard, TalonSRX port, Joystick DriverJoystick, double turnDampener, double throDampener, boolean verbose)
   {
-    double thro = throDampener * DriverJoystick.getRawAxis(1); // Populate thro with axis one
-    double yaw = turnDampener * DriverJoystick.getRawAxis(2); // Populate with axis two
+    double thro = throDampener * DriverJoystick.getRawAxis(RobotMap.driverThroAxis); // Populate thro throAxis
+    double yaw = turnDampener * DriverJoystick.getRawAxis(RobotMap.driverYawAxis); // Populate with yawAxis
 
     starboard.set(ControlMode.PercentOutput, (-1 * thro) - (yaw * RobotMap.invertSteering));  // From the inverse of thro, subtract yaw
     port.set(ControlMode.PercentOutput, thro - (yaw * RobotMap.invertSteering));  // subtract yaw from thro
@@ -34,7 +35,7 @@ public class Drivetrain extends Subsystem {
       SmartDashboard.putNumber("Thro", thro);
       SmartDashboard.putNumber("Yaw", yaw);
     }
-  }
+  } 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
