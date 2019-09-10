@@ -23,7 +23,7 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Robot extends TimedRobot {
   public static Drivetrain drivetrain = new Drivetrain();
-  public static OI m_oi;
+  public static OI robotOI;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_oi = new OI();
+    robotOI = new OI();
     
     // Define Joysticks
     RobotMap.driverStick = new Joystick(RobotMap.driverStickPort);  // Define driver stick
