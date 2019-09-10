@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-    Drivetrain.flyByWireA(RobotMap.starboardMotor, RobotMap.portMotor, RobotMap.driverStick, Constants.turnDampener, Constants.throDampener, true); // Using the driver control stick, fly by wire
+    Drivetrain.flyByWireA(RobotMap.starboardMotor, RobotMap.portMotor, RobotMap.driverStick, Constants.turnDampener, Constants.throDampener); // Using the driver control stick, fly by wire
   }
 
   /**

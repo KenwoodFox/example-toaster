@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -23,18 +22,13 @@ public class Drivetrain extends Subsystem {
    * flyByWireA uses no PID control and is fully manual
    * For manual driver stick imput only.
    */
-  public static void flyByWireA(TalonSRX starboard, TalonSRX port, Joystick DriverJoystick, double turnDampener, double throDampener, boolean verbose)
+  public static void flyByWireA(TalonSRX starboard, TalonSRX port, Joystick DriverJoystick, double turnDampener, double throDampener)
   {
     double thro = throDampener * DriverJoystick.getRawAxis(RobotMap.driverThroAxis); // Populate thro throAxis
     double yaw = turnDampener * DriverJoystick.getRawAxis(RobotMap.driverYawAxis); // Populate with yawAxis
 
     starboard.set(ControlMode.PercentOutput, (-1 * thro) - (yaw * RobotMap.invertSteering));  // From the inverse of thro, subtract yaw
     port.set(ControlMode.PercentOutput, thro - (yaw * RobotMap.invertSteering));  // subtract yaw from thro
-
-    if(verbose == true){
-      SmartDashboard.putNumber("Thro", thro);
-      SmartDashboard.putNumber("Yaw", yaw);
-    }
   }
 
   /**
