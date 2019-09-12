@@ -9,9 +9,15 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.ros_auto;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -22,6 +28,18 @@ import frc.robot.subsystems.Drivetrain;
  * project.
  */
 public class Robot extends TimedRobot {
+  // Commands
+  Command autonomous;
+
+  // ROS Variables
+  NetworkTableEntry robotX; // Current x, y and heading of the robot
+  NetworkTableEntry robotY;
+  NetworkTableEntry robotHeading;
+
+  NetworkTableEntry coprocessorPort; // For tank drive
+  NetworkTableEntry coprocessorStarboard;
+  NetworkTableEntry rosTime; // Is ros time (slow estimate)
+
   public static Drivetrain drivetrain = new Drivetrain();
   public static OI robotOI;
 
@@ -32,6 +50,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotOI = new OI();
+    autonomous = new ros_auto();
     
     // Define Joysticks
     RobotMap.driverStick = new Joystick(RobotMap.driverStickPort);  // Define driver stick
@@ -39,6 +58,18 @@ public class Robot extends TimedRobot {
     // Define motors
     RobotMap.starboardMotor = new TalonSRX(RobotMap.starboardAddress); // Define starboard motor
     RobotMap.portMotor = new TalonSRX(RobotMap.portAddress); // Define port motor
+
+    // Setup Network Tables
+    NetworkTableInstance inst = NetworkTableInstance.getDefault(); // Get the default instance of network tables on the rio
+    NetworkTable rostable = inst.getTable("ros"); // Get the table ros
+
+    // Define ROS vars
+    robotX = rostable.getEntry("robotX");
+    robotY = rostable.getEntry("robotY");
+    robotHeading = rostable.getEntry("robotHeading");
+    coprocessorPort = rostable.getEntry("coprocessorPort");
+    coprocessorStarboard = rostable.getEntry("coprocessorStarboard");
+    rosTime = rostable.getEntry("rosTime");
   }
 
   /**
@@ -51,6 +82,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    double portEncoder = RobotMap.portMotor.getSelectedSensorPosition(); // Get the encoder value of the port encoder
+    double startboardEncoder = RobotMap.starboardMotor.getSelectedSensorPosition(); // Ge the encoder value of the starboard encoder
+    SmartDashboard.putNumber("Port", portEncoder); // Publish the values to smartdashboard
+    SmartDashboard.putNumber("Starboard", startboardEncoder);
   }
 
   /**
@@ -72,6 +107,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    autonomous.start(); // Start the autonomous (runs command ros_auto())
   }
 
   /**
@@ -79,7 +115,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    Scheduler.getInstance().run(); // Actually not sure what this line does
+
+    //Drivetrain.flyWithWiresA(RobotMap.starboardMotor, RobotMap.portMotor, coprocessorPort.getDouble(0), coprocessorStarboard.getDouble(0), 1); // The .getDouble() command will return a default value in here ()
   }
 
   @Override
