@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // Define Commands
     robotOI = new OI();
     autonomous = new ros_auto();
     
@@ -116,8 +117,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run(); // Actually not sure what this line does
-
-    //Drivetrain.flyWithWiresA(RobotMap.starboardMotor, RobotMap.portMotor, coprocessorPort.getDouble(0), coprocessorStarboard.getDouble(0), 1); // The .getDouble() command will return a default value in here ()
   }
 
   @Override
